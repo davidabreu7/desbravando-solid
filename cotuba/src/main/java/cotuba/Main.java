@@ -12,13 +12,18 @@ public class Main {
     Path diretorioDosMD = cliParser.getDiretorioDosMD();
     Path arquivoDeSaida = cliParser.getArquivoDeSaida();
 
+    var renderer = new MDtoHTML();
+    var capitulos = renderer.renderMDtoHTML(diretorioDosMD);
+
+    Ebook ebook = new Ebook(formato, capitulos, arquivoDeSaida);
+
     if ("pdf".equals(formato)) {
       var pdf = new PdfConverter();
-      pdf.convertPdf(diretorioDosMD, arquivoDeSaida);
+      pdf.convertPdf(ebook);
 
     } else if ("epub".equals(formato)) {
         var epub = new EpubConverter();
-        epub.convertEpub(diretorioDosMD, arquivoDeSaida);
+        epub.convertEpub(ebook);
     } else {
       throw new IllegalArgumentException("Formato do ebook inválido: " + formato);
     }
